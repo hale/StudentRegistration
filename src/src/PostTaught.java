@@ -1,6 +1,6 @@
 package src;
 
-public class PostgraduateTaught extends Student {
+public class PostTaught extends Student {
 	private String dept;
 	private int fee;
 	/**
