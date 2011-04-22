@@ -17,7 +17,7 @@ public class Register {
 	}
 	
 	private void loadData() {
-		reader = new TextReader("students.txt", this);
+		reader = new TextReader("/Users/phil989/gitrepos/StudentRegistration/students.txt");
 		students = new Stack<Student>();
 		while (reader.readLine() != null) {
 			String[] entry = reader.readLine().split(";");
@@ -27,26 +27,40 @@ public class Register {
 			String gender = entry[2];
 			Student stu = new Student();
 			//stu.setType(type);
+			stu.setType(type);
 			stu.setName(name);
 			stu.setGender(gender);
 			if (type.equals("Undergraduate")) {
-				Undergraduate student = (Undergraduate) stu;
-				student.setDegreeIntention(entry[3]);
-				student.setCourseLength(Integer.parseInt(entry[4]));
-				students.push(student);
+				/*
+				 * So we have:
+				 * A student object stu with the basic fields filled in
+				 * 
+				 * We want:
+				 * to make this a ugad object (parent -> child)
+				 * call ugad specific methods.
+				 * add ugad to students.
+				 * 
+				 * 
+				 */
+				
+				Undergraduate ugrad = new Undergraduate(stu);
+				ugrad.setDegreeIntention(entry[3]);
+				ugrad.setCourseLength(Integer.parseInt(entry[4]));
+				students.push(ugrad);
 			}
 			else if (type.equals("Taught Postgraduate")) {
-				PostTaught student = (PostTaught) stu;
-				student.setDept(entry[3]);
-				student.setFee(Integer.parseInt(entry[4]));				
-				students.push(student);
+				PostTaught postTaught = new PostTaught(stu);
+				postTaught.setDept(entry[3]);
+				postTaught.setFee(Integer.parseInt(entry[4]));				
+				students.push(postTaught);
 			}
 			else if (type.equals("Research Postgraduate")) {
-				PostResearch student = (PostResearch) stu;
-				student.setSupervisor(entry[3]);
-				student.setOrigin(entry[4]);
-				students.push(student);			
+				PostResearch postResearch = new PostResearch(stu);
+				postResearch.setSupervisor(entry[3]);
+				postResearch.setOrigin(entry[4]);
+				students.push(postResearch);			
 			}
+			reader.close();
 			
 		}
 		
@@ -61,8 +75,12 @@ public class Register {
 		String name = ud.getString("Please enter the name of the student.");
 		String gender = ud.getString("Please enter the gender of the student");
 		
+		Student stu = new Student();
+		stu.setName(name);
+		stu.setGender(gender);
+		stu.setType(type);
 		if (type.equals("Undergraduate")) {
-			Undergraduate ugrad = new Undergraduate();
+			Undergraduate ugrad = new Undergraduate(stu);
 			String degreeIntention = ud.getString("Please enter the student's degree intention.");
 			int courseLength = ud.getInt("Please enter the length of the course in years");
 			// Error checking.
@@ -74,7 +92,7 @@ public class Register {
 			students.push(ugrad);
 		}
 		else if (type.equals("Taught Postgraduate")) {
-			PostTaught postTaught = new PostTaught(); 
+			PostTaught postTaught = new PostTaught(stu); 
 			String dept = ud.getString("Please enter the department under which the student will be studying");
 			int fee = ud.getInt("Pleae enter the fee for the student's course");
 			// Error checking
@@ -86,7 +104,7 @@ public class Register {
 			students.push(postTaught);			
 		}
 		else if (type.equals("Research Postgraduate")) {
-			PostResearch postResearch =  new PostResearch(); 
+			PostResearch postResearch = new PostResearch(stu); 
 			String supervisor = ud.getString("Please enter this student's supervisor");
 			String[] origins = {"UK", "EU" +"International"};
 			String origin = ud.selectString("Please select where this student is from", origins);
@@ -102,6 +120,7 @@ public class Register {
 	 * Empties the stack and outputs the data to the file.
 	 */
 	private void commitChanges(){
+			writer = new TextWriter("/Users/phil989/gitrepos/StudentRegistration/students.txt");
 			while (!students.isEmpty()) {
 				writer.writeLine(students.pop().toString());
 			}
@@ -110,21 +129,22 @@ public class Register {
 	
 	
 	public static void main(String[] aArgs) {
+		System.out.println("TESTING TESTING!!");
 		Register r = new Register();
 		r.loadData();
-		while (r.ud.getBoolean("Would you like to add a new student?")); {
+		while (r.ud.getBoolean("Would you like to add a new student?")) {
 			r.addStudent();
 		}
 		r.commitChanges();	
+		r.printStudents();
 	}
 	
 	
 
-	private void printStudents() {
+	public void printStudents() {
 		for (Student student : students) {
 			System.out.println(student.toString());
-		}
-		
+		}		
 	}
 	
 }

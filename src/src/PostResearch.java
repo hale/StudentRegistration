@@ -3,6 +3,23 @@ package src;
 public class PostResearch extends Student{
 	private String supervisor;
 	private String origin;
+	
+	public PostResearch() {
+		supervisor = "";
+		origin = "";
+	}
+	
+	public PostResearch(Student stu){
+		super.setType(stu.getType());
+		super.setName(stu.getName());
+		super.setGender(stu.getGender());
+	}
+	
+	public PostResearch(String supervisor, String origin) {
+		this.supervisor = supervisor;
+		this.origin = origin;
+	}
+	
 	/**
 	 * @param supervisor the supervisor to set
 	 */
@@ -26,6 +43,10 @@ public class PostResearch extends Student{
 	 */
 	public String getOrigin() {
 		return origin;
+	}
+	
+	public String toString() {
+		return super.getType() + ";" + super.getName() + ";" + super.getGender() + ";" + supervisor + ";" + origin;
 	}
 
 }

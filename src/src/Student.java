@@ -3,6 +3,7 @@ package src;
 public class Student {
 	private String name;
 	private String gender;
+	private String type;
 	
 	public Student()  {
 		setName("Unknown");
@@ -39,7 +40,20 @@ public class Student {
 	public String getGender() {
 		return gender;
 	}
-	
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
 
 	
 }
